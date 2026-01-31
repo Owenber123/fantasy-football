@@ -265,7 +265,7 @@ export const Home = () => {
     <div className="home">
       <header className="header">
         <div className="header-top">
-          <h1>Washed Up</h1>
+          <h1>Washed Up - Fantasy Football</h1>
           <div className="header-right">
             {user && <span className="user-name">{member?.name}</span>}
             {isAdmin && (
