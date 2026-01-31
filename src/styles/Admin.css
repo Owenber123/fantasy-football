@@ -1,0 +1,665 @@
+.admin-container {
+  min-height: 100vh;
+  background: var(--bg-primary);
+}
+
+.access-denied {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  text-align: center;
+  padding: 2rem;
+}
+
+.access-denied h2 {
+  color: var(--bills-red);
+  margin-bottom: 0.5rem;
+}
+
+.access-denied p {
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.back-btn {
+  padding: 0.75rem 1.5rem;
+  background: var(--bills-blue);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.admin-header {
+  background: linear-gradient(135deg, var(--bills-blue) 0%, var(--bills-blue-dark) 100%);
+  color: white;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.admin-header h1 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.header-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.header-btn {
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+
+.header-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.header-btn.logout {
+  background: var(--bills-red);
+  border-color: var(--bills-red);
+}
+
+.tabs {
+  display: flex;
+  background: var(--bg-secondary);
+  overflow-x: auto;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.tabs button {
+  flex: 1;
+  min-width: max-content;
+  padding: 1rem;
+  border: none;
+  background: none;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+}
+
+.tabs button.active {
+  color: var(--bills-blue);
+  border-bottom-color: var(--bills-blue);
+  font-weight: 600;
+}
+
+[data-theme="dark"] .tabs button.active {
+  color: #60a5fa;
+  border-bottom-color: #60a5fa;
+}
+
+.admin-content {
+  padding: 1rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.admin-section {
+  background: var(--bg-card);
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 2px 8px var(--shadow);
+  border: 1px solid var(--border-color);
+}
+
+.admin-section h2 {
+  margin: 0 0 1.5rem;
+  color: var(--bills-blue);
+  font-size: 1.3rem;
+}
+
+[data-theme="dark"] .admin-section h2 {
+  color: #60a5fa;
+}
+
+.admin-section h3 {
+  margin: 1.5rem 0 1rem;
+  color: var(--text-primary);
+  font-size: 1rem;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.section-header h2 {
+  margin: 0;
+}
+
+.year-select {
+  padding: 0.5rem 1rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.form-group input,
+.admin-section input,
+.admin-section textarea,
+.admin-section select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.admin-section input:focus,
+.admin-section textarea:focus,
+.admin-section select:focus {
+  outline: none;
+  border-color: var(--bills-blue);
+}
+
+[data-theme="dark"] .admin-section input:focus,
+[data-theme="dark"] .admin-section textarea:focus,
+[data-theme="dark"] .admin-section select:focus {
+  border-color: #60a5fa;
+}
+
+.admin-section textarea {
+  min-height: 80px;
+  resize: vertical;
+  margin: 0.5rem 0;
+}
+
+.admin-section select {
+  margin: 0.5rem 0;
+}
+
+.form-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.form-row select {
+  flex: 1;
+}
+
+.save-btn, .add-btn {
+  width: 100%;
+  padding: 0.875rem;
+  background: var(--bills-blue);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background 0.2s;
+}
+
+.save-btn:hover:not(:disabled), .add-btn:hover {
+  background: var(--bills-blue-dark);
+}
+
+.save-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 2rem;
+  font-style: italic;
+}
+
+/* Draft Order */
+.draft-order-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.draft-order-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  gap: 0.75rem;
+  border: 1px solid var(--border-color);
+}
+
+.draft-order-item .position {
+  width: 28px;
+  height: 28px;
+  background: var(--bills-blue);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.draft-order-item .name {
+  flex: 1;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.draft-order-item .actions {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.draft-order-item .actions button {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: var(--border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  transition: background 0.2s;
+}
+
+.draft-order-item .actions button:hover:not(:disabled) {
+  background: var(--bills-blue);
+  color: white;
+}
+
+.draft-order-item .actions button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.draft-order-item .actions button.delete {
+  background: rgba(198, 12, 48, 0.1);
+  color: var(--bills-red);
+}
+
+.draft-order-item .actions button.delete:hover {
+  background: var(--bills-red);
+  color: white;
+}
+
+.member-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip {
+  padding: 0.5rem 1rem;
+  background: rgba(0, 51, 141, 0.1);
+  border: 1px solid var(--bills-blue);
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--bills-blue);
+  transition: all 0.2s;
+}
+
+[data-theme="dark"] .chip {
+  background: rgba(96, 165, 250, 0.1);
+  border-color: #60a5fa;
+  color: #60a5fa;
+}
+
+.chip:hover {
+  background: var(--bills-blue);
+  color: white;
+}
+
+[data-theme="dark"] .chip:hover {
+  background: #3b82f6;
+}
+
+/* Punishments */
+.add-punishment {
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--border-color);
+}
+
+.add-punishment h3 {
+  margin: 0 0 1rem;
+}
+
+.punishment-year-section {
+  margin-top: 1.5rem;
+}
+
+.punishment-year-section h3 {
+  margin: 0 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--bills-blue);
+}
+
+[data-theme="dark"] .punishment-year-section h3 {
+  border-bottom-color: #60a5fa;
+}
+
+.punishment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.punishment-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  border-left: 4px solid var(--bills-red);
+  gap: 1rem;
+  flex-wrap: wrap;
+  border: 1px solid var(--border-color);
+}
+
+.punishment-item.completed {
+  border-left-color: #48bb78;
+  opacity: 0.7;
+}
+
+.punishment-info {
+  flex: 1;
+  min-width: 200px;
+}
+
+.punishment-info strong {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: var(--text-primary);
+}
+
+.punishment-info p {
+  margin: 0 0 0.25rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.punishment-info small {
+  color: var(--text-muted);
+}
+
+.punishment-item .actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.punishment-item .actions button {
+  padding: 0.5rem 0.75rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  background: var(--border-color);
+  color: var(--text-primary);
+  transition: all 0.2s;
+}
+
+.punishment-item .actions button:hover {
+  background: var(--bills-blue);
+  color: white;
+}
+
+.punishment-item .actions button.delete {
+  background: rgba(198, 12, 48, 0.1);
+  color: var(--bills-red);
+}
+
+.punishment-item .actions button.delete:hover {
+  background: var(--bills-red);
+  color: white;
+}
+
+/* Members */
+.members-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.member-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  gap: 1rem;
+  flex-wrap: wrap;
+  border: 1px solid var(--border-color);
+}
+
+.member-item .member-name {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.member-item .email {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  flex: 1;
+}
+
+.member-item .badge {
+  background: var(--bills-blue);
+  color: white;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.note {
+  margin-top: 1rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+/* Seed Database Banner */
+.seed-banner {
+  background: linear-gradient(135deg, var(--bills-blue) 0%, var(--bills-blue-dark) 100%);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  color: white;
+}
+
+.seed-banner h3 {
+  margin: 0 0 0.5rem;
+  color: white;
+  font-size: 1.2rem;
+}
+
+.seed-banner p {
+  margin: 0 0 1rem;
+  opacity: 0.9;
+  font-size: 0.95rem;
+}
+
+.seed-btn {
+  padding: 0.75rem 2rem;
+  background: white;
+  color: var(--bills-blue);
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.seed-btn:hover:not(:disabled) {
+  background: #f0f0f0;
+  transform: translateY(-1px);
+}
+
+.seed-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Add Member Form */
+.add-member-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.add-member-form input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.add-member-form input:focus {
+  outline: none;
+  border-color: var(--bills-blue);
+}
+
+[data-theme="dark"] .add-member-form input:focus {
+  border-color: #60a5fa;
+}
+
+.add-member-form button {
+  padding: 0.75rem 1.25rem;
+  background: var(--bills-blue);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.add-member-form button:hover {
+  background: var(--bills-blue-dark);
+}
+
+/* Punishment Edit Form */
+.punishment-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.punishment-edit-form input,
+.punishment-edit-form textarea {
+  margin: 0;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.edit-actions .save-btn,
+.edit-actions .cancel-btn {
+  flex: 1;
+  margin-top: 0;
+  padding: 0.5rem 1rem;
+}
+
+.edit-actions .cancel-btn {
+  background: var(--border-color);
+  color: var(--text-primary);
+}
+
+.edit-actions .cancel-btn:hover {
+  background: var(--text-muted);
+  color: white;
+}
+
+.punishment-item .actions .edit-btn {
+  background: rgba(0, 51, 141, 0.1);
+  color: var(--bills-blue);
+}
+
+[data-theme="dark"] .punishment-item .actions .edit-btn {
+  background: rgba(96, 165, 250, 0.1);
+  color: #60a5fa;
+}
+
+.punishment-item .actions .edit-btn:hover {
+  background: var(--bills-blue);
+  color: white;
+}
+
+[data-theme="dark"] .punishment-item .actions .edit-btn:hover {
+  background: #3b82f6;
+}
+
+/* Desktop */
+@media (min-width: 768px) {
+  .admin-header {
+    padding: 1.5rem 2rem;
+  }
+
+  .admin-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .admin-content {
+    padding: 2rem;
+  }
+
+  .admin-section {
+    padding: 2rem;
+  }
+}
