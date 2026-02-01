@@ -37,3 +37,14 @@ export interface SeasonData {
   draftOrder: DraftPick[];
   punishments: Punishment[];
 }
+
+export interface Standing {
+  id: string;
+  position: number;
+  teamName: string;
+  wins: number;
+  losses: number;
+  ties: number;
+  pointsFor?: number;
+  year: string;
+}

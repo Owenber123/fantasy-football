@@ -645,6 +645,49 @@
   background: #3b82f6;
 }
 
+/* Standings */
+.draft-order-item .record {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.draft-order-item .points {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  background: var(--bg-card);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+.add-standing-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.add-standing-form > input {
+  margin: 0;
+}
+
+.record-inputs {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.record-inputs input {
+  flex: 1;
+  text-align: center;
+  padding: 0.75rem 0.5rem;
+}
+
+.add-standing-form .add-btn {
+  margin-top: 0.5rem;
+}
+
 /* Desktop */
 @media (min-width: 768px) {
   .admin-header {

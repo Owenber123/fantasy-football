@@ -26,6 +26,24 @@ const activePunishments = [
   { title: 'Tatted', description: 'Get this tattoo (At least 2.5 inches in diameter) anywhere on your body.', year: '2025' },
 ];
 
+// Standings by year
+const standings2023 = [
+  { position: 1, teamName: 'Bru', wins: 12, losses: 2, ties: 0, pointsFor: 32 },
+  { position: 2, teamName: 'Penguin Pizza', wins: 9, losses: 5, ties: 0 },
+  { position: 3, teamName: 'Bridal Blitzkrieg', wins: 8, losses: 6, ties: 0 },
+  { position: 4, teamName: 'Team Day', wins: 11, losses: 3, ties: 0 },
+  { position: 5, teamName: 'Gluebobaroonie', wins: 7, losses: 7, ties: 0 },
+  { position: 6, teamName: 'CaterKillers', wins: 7, losses: 7, ties: 0 },
+  { position: 7, teamName: 'ragglehans', wins: 8, losses: 6, ties: 0 },
+  { position: 8, teamName: "Jub's injured men", wins: 6, losses: 8, ties: 0 },
+  { position: 9, teamName: 'Zynbabwe Pouching Club', wins: 7, losses: 7, ties: 0 },
+  { position: 10, teamName: "Owner Of Finn's Dome", wins: 6, losses: 8, ties: 0 },
+  { position: 11, teamName: 'Team Plourde', wins: 5, losses: 9, ties: 0 },
+  { position: 12, teamName: 'The Terrance Bates Foundation', wins: 6, losses: 8, ties: 0 },
+  { position: 13, teamName: 'Jerkin Goff', wins: 6, losses: 8, ties: 0 },
+  { position: 14, teamName: 'Team Slye', wins: 0, losses: 14, ties: 0 },
+];
+
 // Completed punishments from past years
 const completedPunishments = [
   { title: 'Delivery Boy', description: 'Food delivery driver until you make 200$ and then put that 200$ on any 50/50 or higher risk bet.', year: '2024', assignedToName: 'Noah', completed: true },
@@ -80,6 +98,17 @@ export async function seedDatabase() {
       await setDoc(punishmentRef, punishment);
     }
 
+    // 5. Add 2023 standings
+    console.log('Adding 2023 standings...');
+    for (const standing of standings2023) {
+      const standingId = `standing-2023-${standing.position}`;
+      await setDoc(doc(db, 'standings', standingId), {
+        id: standingId,
+        ...standing,
+        year: '2023'
+      });
+    }
+
     console.log('Database seeded successfully!');
     return true;
   } catch (error) {
@@ -88,5 +117,25 @@ export async function seedDatabase() {
   }
 }
 
+// Standalone function to seed just standings (can be called from console)
+export async function seedStandings() {
+  console.log('Adding 2023 standings...');
+  try {
+    for (const standing of standings2023) {
+      const standingId = `standing-2023-${standing.position}`;
+      await setDoc(doc(db, 'standings', standingId), {
+        id: standingId,
+        ...standing,
+        year: '2023'
+      });
+    }
+    console.log('Standings seeded successfully!');
+    return true;
+  } catch (error) {
+    console.error('Error seeding standings:', error);
+    return false;
+  }
+}
+
 // Export for use
-export { members, draftOrders, leagueInfo };
+export { members, draftOrders, leagueInfo, standings2023 };

@@ -806,6 +806,113 @@
   color: white;
 }
 
+/* Standings Tab */
+.standings-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.standing-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border-color);
+  gap: 1rem;
+}
+
+.standing-item:last-child {
+  border-bottom: none;
+}
+
+.standing-item.champion {
+  background: linear-gradient(90deg, rgba(255, 215, 0, 0.15) 0%, transparent 100%);
+  margin: 0 -1.25rem;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  border-radius: 8px;
+}
+
+.standing-item .position {
+  width: 32px;
+  height: 32px;
+  background: var(--bills-blue);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.standing-item.champion .position {
+  background: linear-gradient(135deg, #ffd700 0%, #ffb700 100%);
+  color: #333;
+}
+
+.standing-item.silver .position {
+  background: linear-gradient(135deg, #c0c0c0 0%, #a8a8a8 100%);
+  color: #333;
+}
+
+.standing-item.bronze .position {
+  background: linear-gradient(135deg, #cd7f32 0%, #b8722c 100%);
+  color: #fff;
+}
+
+.standing-item.last-place .position {
+  background: var(--bills-red);
+  color: #fff;
+}
+
+.standing-team {
+  flex: 1;
+  min-width: 0;
+}
+
+.standing-team-name {
+  font-size: 1rem;
+  color: var(--text-primary);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.standing-item.champion .standing-team-name {
+  font-weight: 700;
+}
+
+.standing-record {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.standing-points {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  background: var(--bg-secondary);
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.champion-badge {
+  background: linear-gradient(135deg, #ffd700 0%, #ffb700 100%);
+  color: #333;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
 /* Desktop */
 @media (min-width: 768px) {
   .header {

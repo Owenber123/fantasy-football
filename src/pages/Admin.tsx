@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
 import { useAuth } from '../contexts/AuthContext';
 import { seedDatabase } from '../seedData';
-import type { DraftPick, Punishment, LeagueInfo, Member } from '../types';
+import type { DraftPick, Punishment, LeagueInfo, Member, Standing } from '../types';
 import '../styles/Admin.css';
 
 const AVAILABLE_YEARS = ['2025', '2024', '2023', '2022', '2021'];
@@ -12,16 +12,20 @@ const AVAILABLE_YEARS = ['2025', '2024', '2023', '2022', '2021'];
 export const Admin = () => {
   const { isAdmin, logout } = useAuth();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'league' | 'draft' | 'punishments' | 'members'>('league');
+  const [activeTab, setActiveTab] = useState<'league' | 'draft' | 'punishments' | 'standings' | 'members'>('league');
   const [selectedYear, setSelectedYear] = useState(AVAILABLE_YEARS[0]);
 
   const [leagueInfo, setLeagueInfo] = useState<LeagueInfo>({ name: '', season: '', draftDate: '', draftTime: '' });
   const [allDraftPicks, setAllDraftPicks] = useState<DraftPick[]>([]);
   const [punishments, setPunishments] = useState<Punishment[]>([]);
+  const [allStandings, setAllStandings] = useState<Standing[]>([]);
   const [members, setMembers] = useState<Member[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [seeding, setSeeding] = useState(false);
+
+  // New standing form
+  const [newStanding, setNewStanding] = useState({ teamName: '', wins: '', losses: '', ties: '', pointsFor: '' });
 
   // New punishment form
   const [newPunishment, setNewPunishment] = useState({ title: '', description: '', assignedTo: '', year: AVAILABLE_YEARS[0] });
@@ -77,6 +81,14 @@ export const Admin = () => {
         setMembers(membersSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Member)));
       } catch (e) {
         console.log('No member data');
+      }
+
+      // Fetch standings
+      try {
+        const standingsSnap = await getDocs(collection(db, 'standings'));
+        setAllStandings(standingsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Standing)));
+      } catch (e) {
+        console.log('No standings data');
       }
     } catch (err) {
       console.error('Error fetching data:', err);
@@ -257,6 +269,81 @@ export const Admin = () => {
     }
   };
 
+  // Standings CRUD
+  const standings = allStandings
+    .filter(s => s.year === selectedYear)
+    .sort((a, b) => a.position - b.position);
+
+  const addStanding = async () => {
+    if (!newStanding.teamName.trim()) return;
+
+    const newPosition = standings.length + 1;
+    const standingId = `standing-${selectedYear}-${newPosition}-${Date.now()}`;
+    const standing: Standing = {
+      id: standingId,
+      position: newPosition,
+      teamName: newStanding.teamName.trim(),
+      wins: parseInt(newStanding.wins) || 0,
+      losses: parseInt(newStanding.losses) || 0,
+      ties: parseInt(newStanding.ties) || 0,
+      year: selectedYear,
+      ...(newStanding.pointsFor ? { pointsFor: parseInt(newStanding.pointsFor) } : {})
+    };
+
+    try {
+      await setDoc(doc(db, 'standings', standingId), standing);
+      setAllStandings([...allStandings, standing]);
+      setNewStanding({ teamName: '', wins: '', losses: '', ties: '', pointsFor: '' });
+    } catch (err) {
+      console.error('Error adding standing:', err);
+    }
+  };
+
+  const removeStanding = async (standingId: string) => {
+    try {
+      await deleteDoc(doc(db, 'standings', standingId));
+      const remaining = allStandings.filter(s => s.id !== standingId);
+
+      // Re-number positions for this year only
+      const thisYearStandings = remaining
+        .filter(s => s.year === selectedYear)
+        .sort((a, b) => a.position - b.position);
+
+      const renumbered = thisYearStandings.map((s, idx) => ({ ...s, position: idx + 1 }));
+
+      for (const s of renumbered) {
+        await setDoc(doc(db, 'standings', s.id), s);
+      }
+
+      const otherYearStandings = remaining.filter(s => s.year !== selectedYear);
+      setAllStandings([...otherYearStandings, ...renumbered]);
+    } catch (err) {
+      console.error('Error removing standing:', err);
+    }
+  };
+
+  const moveStanding = async (standingId: string, direction: 'up' | 'down') => {
+    const idx = standings.findIndex(s => s.id === standingId);
+    if ((direction === 'up' && idx === 0) || (direction === 'down' && idx === standings.length - 1)) return;
+
+    const newOrder = [...standings];
+    const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
+    [newOrder[idx], newOrder[swapIdx]] = [newOrder[swapIdx], newOrder[idx]];
+
+    const renumbered = newOrder.map((s, i) => ({ ...s, position: i + 1 }));
+
+    try {
+      for (const s of renumbered) {
+        await setDoc(doc(db, 'standings', s.id), s);
+      }
+
+      const otherYearStandings = allStandings.filter(s => s.year !== selectedYear);
+      setAllStandings([...otherYearStandings, ...renumbered]);
+    } catch (err) {
+      console.error('Error moving standing:', err);
+    }
+  };
+
   // Group punishments by year for display
   const punishmentsByYear = punishments.reduce((acc, p) => {
     if (!acc[p.year]) acc[p.year] = [];
@@ -306,6 +393,7 @@ export const Admin = () => {
       <nav className="tabs">
         <button className={activeTab === 'league' ? 'active' : ''} onClick={() => setActiveTab('league')}>League</button>
         <button className={activeTab === 'draft' ? 'active' : ''} onClick={() => setActiveTab('draft')}>Draft</button>
+        <button className={activeTab === 'standings' ? 'active' : ''} onClick={() => setActiveTab('standings')}>Standings</button>
         <button className={activeTab === 'punishments' ? 'active' : ''} onClick={() => setActiveTab('punishments')}>Punishments</button>
         <button className={activeTab === 'members' ? 'active' : ''} onClick={() => setActiveTab('members')}>Members</button>
       </nav>
@@ -520,6 +608,80 @@ export const Admin = () => {
                 </div>
               ))
             )}
+          </section>
+        )}
+
+        {activeTab === 'standings' && (
+          <section className="admin-section">
+            <div className="section-header">
+              <h2>Standings</h2>
+              <select
+                className="year-select"
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(e.target.value)}
+              >
+                {AVAILABLE_YEARS.map(year => (
+                  <option key={year} value={year}>{year}</option>
+                ))}
+              </select>
+            </div>
+
+            {standings.length === 0 ? (
+              <p className="empty-state">No standings for {selectedYear}</p>
+            ) : (
+              <div className="draft-order-list">
+                {standings.map((s) => (
+                  <div key={s.id} className="draft-order-item">
+                    <span className="position">{s.position}</span>
+                    <span className="name">{s.teamName}</span>
+                    <span className="record">{s.wins}-{s.losses}-{s.ties}</span>
+                    {s.pointsFor && <span className="points">{s.pointsFor} pts</span>}
+                    <div className="actions">
+                      <button onClick={() => moveStanding(s.id, 'up')} disabled={s.position === 1}>↑</button>
+                      <button onClick={() => moveStanding(s.id, 'down')} disabled={s.position === standings.length}>↓</button>
+                      <button onClick={() => removeStanding(s.id)} className="delete">×</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <h3>Add to {selectedYear} Standings</h3>
+            <div className="add-standing-form">
+              <input
+                type="text"
+                placeholder="Team name"
+                value={newStanding.teamName}
+                onChange={(e) => setNewStanding({ ...newStanding, teamName: e.target.value })}
+              />
+              <div className="record-inputs">
+                <input
+                  type="number"
+                  placeholder="W"
+                  value={newStanding.wins}
+                  onChange={(e) => setNewStanding({ ...newStanding, wins: e.target.value })}
+                />
+                <input
+                  type="number"
+                  placeholder="L"
+                  value={newStanding.losses}
+                  onChange={(e) => setNewStanding({ ...newStanding, losses: e.target.value })}
+                />
+                <input
+                  type="number"
+                  placeholder="T"
+                  value={newStanding.ties}
+                  onChange={(e) => setNewStanding({ ...newStanding, ties: e.target.value })}
+                />
+                <input
+                  type="number"
+                  placeholder="Pts (optional)"
+                  value={newStanding.pointsFor}
+                  onChange={(e) => setNewStanding({ ...newStanding, pointsFor: e.target.value })}
+                />
+              </div>
+              <button onClick={addStanding} className="add-btn">Add</button>
+            </div>
           </section>
         )}
 

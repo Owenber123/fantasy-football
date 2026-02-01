@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
 import { useAuth } from '../contexts/AuthContext';
 import { seedDatabase } from '../seedData';
-import type { DraftPick, Punishment, LeagueInfo } from '../types';
+import type { DraftPick, Punishment, LeagueInfo, Standing } from '../types';
 import '../styles/Home.css';
 
 const AVAILABLE_YEARS = ['2025', '2024', '2023', '2022', '2021'];
@@ -23,11 +23,12 @@ export const Home = () => {
     return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
   });
   const [selectedYear, setSelectedYear] = useState(AVAILABLE_YEARS[0]);
-  const [activeTab, setActiveTab] = useState<'home' | 'punishments'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'punishments' | 'standings'>('home');
 
   const [leagueInfo, setLeagueInfo] = useState<LeagueInfo | null>(null);
   const [draftOrder, setDraftOrder] = useState<DraftPick[]>([]);
   const [allPunishments, setAllPunishments] = useState<Punishment[]>([]);
+  const [allStandings, setAllStandings] = useState<Standing[]>([]);
   const [loading, setLoading] = useState(true);
   const [seeding, setSeeding] = useState(false);
 
@@ -74,6 +75,14 @@ export const Home = () => {
           setAllPunishments(punishSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Punishment)));
         } catch (e) {
           console.log('No punishment data yet');
+        }
+
+        // Fetch all standings
+        try {
+          const standingsSnap = await getDocs(collection(db, 'standings'));
+          setAllStandings(standingsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Standing)));
+        } catch (e) {
+          console.log('No standings data yet');
         }
       } catch (err) {
         console.error('Error fetching data:', err);
@@ -311,6 +320,12 @@ export const Home = () => {
           Home
         </button>
         <button
+          className={activeTab === 'standings' ? 'active' : ''}
+          onClick={() => setActiveTab('standings')}
+        >
+          Standings
+        </button>
+        <button
           className={activeTab === 'punishments' ? 'active' : ''}
           onClick={() => setActiveTab('punishments')}
         >
@@ -412,6 +427,57 @@ export const Home = () => {
                   <button onClick={addMemberToDraft}>Add</button>
                 </div>
               )}
+            </div>
+          </>
+        )}
+
+        {activeTab === 'standings' && (
+          <>
+            <div className="year-selector">
+              <select
+                className="year-select"
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(e.target.value)}
+              >
+                {AVAILABLE_YEARS.map(year => (
+                  <option key={year} value={year}>{year} Season</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="card">
+              <h3>Leaderboard</h3>
+              {(() => {
+                const yearStandings = allStandings
+                  .filter(s => s.year === selectedYear)
+                  .sort((a, b) => a.position - b.position);
+
+                if (yearStandings.length === 0) {
+                  return <p className="empty">No standings available for {selectedYear}</p>;
+                }
+
+                return (
+                  <ol className="standings-list">
+                    {yearStandings.map((standing) => (
+                      <li
+                        key={standing.id}
+                        className={`standing-item ${standing.position === 1 ? 'champion' : ''} ${standing.position === 2 ? 'silver' : ''} ${standing.position === 3 ? 'bronze' : ''} ${standing.position === yearStandings.length ? 'last-place' : ''}`}
+                      >
+                        <span className="position">{standing.position}</span>
+                        <div className="standing-team">
+                          <span className="standing-team-name">{standing.teamName}</span>
+                        </div>
+                        <span className="standing-record">
+                          {standing.wins}-{standing.losses}-{standing.ties}
+                        </span>
+                        {standing.pointsFor && (
+                          <span className="standing-points">{standing.pointsFor} pts</span>
+                        )}
+                      </li>
+                    ))}
+                  </ol>
+                );
+              })()}
             </div>
           </>
         )}
