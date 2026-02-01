@@ -16,7 +16,7 @@ const getOrdinalSuffix = (n: number) => {
 };
 
 export const Home = () => {
-  const { user, member, isAdmin, logout, loading: authLoading } = useAuth();
+  const { user, member, isAdmin, logout } = useAuth();
   const navigate = useNavigate();
 
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
