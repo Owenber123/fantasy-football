@@ -5,6 +5,7 @@ const SLEEPER_API = 'https://api.sleeper.app/v1';
 
 // Current season's league; older seasons are found by walking previous_league_id.
 export const CURRENT_LEAGUE_ID = '1389694421427036160';
+export const CURRENT_SEASON = '2026';
 
 // Sleeper display name -> league nickname
 export const MANAGER_NICKNAMES: Record<string, string> = {
