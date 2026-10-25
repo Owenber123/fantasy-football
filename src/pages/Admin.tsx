@@ -55,7 +55,7 @@ export const Admin = () => {
         if (!leagueSnap.empty) {
           setLeagueInfo(leagueSnap.docs[0].data() as LeagueInfo);
         }
-      } catch (e) {
+      } catch {
         console.log('No league data');
       }
 
@@ -63,7 +63,7 @@ export const Admin = () => {
       try {
         const draftSnap = await getDocs(collection(db, 'draftOrder'));
         setAllDraftPicks(draftSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as DraftPick)));
-      } catch (e) {
+      } catch {
         console.log('No draft data');
       }
 
@@ -71,7 +71,7 @@ export const Admin = () => {
       try {
         const punishSnap = await getDocs(collection(db, 'punishments'));
         setPunishments(punishSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Punishment)));
-      } catch (e) {
+      } catch {
         console.log('No punishment data');
       }
 
@@ -79,7 +79,7 @@ export const Admin = () => {
       try {
         const membersSnap = await getDocs(collection(db, 'members'));
         setMembers(membersSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Member)));
-      } catch (e) {
+      } catch {
         console.log('No member data');
       }
 
@@ -87,7 +87,7 @@ export const Admin = () => {
       try {
         const standingsSnap = await getDocs(collection(db, 'standings'));
         setAllStandings(standingsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Standing)));
-      } catch (e) {
+      } catch {
         console.log('No standings data');
       }
     } catch (err) {

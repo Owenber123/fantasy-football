@@ -1,0 +1,212 @@
+/* Stats tab (live Sleeper data) */
+.stats-note {
+  margin: -0.5rem 0 1rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.stats-note:last-child {
+  margin: 0.75rem 0 0;
+}
+
+.stats-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 0 -1.25rem;
+  padding: 0 1.25rem;
+}
+
+.stats-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.stats-table th,
+.stats-table td {
+  padding: 0.5rem 0.5rem;
+  text-align: right;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.stats-table thead th {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-muted);
+}
+
+.stats-table tbody tr:last-child td,
+.stats-table tbody tr:last-child th {
+  border-bottom: none;
+}
+
+.stats-table .left {
+  text-align: left;
+}
+
+.stats-table .strong,
+.stats-table tbody th {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.stats-table td {
+  color: var(--text-secondary);
+}
+
+.stats-table .lucky {
+  color: #15803d;
+  font-weight: 600;
+}
+
+.stats-table .unlucky {
+  color: var(--bills-red);
+  font-weight: 600;
+}
+
+[data-theme="dark"] .stats-table .lucky {
+  color: #4ade80;
+}
+
+[data-theme="dark"] .stats-table .unlucky {
+  color: #f87171;
+}
+
+/* Head-to-head grid */
+.h2h-table th,
+.h2h-table td {
+  text-align: center;
+  padding: 0.45rem 0.4rem;
+  font-size: 0.8rem;
+}
+
+.h2h-table .sticky-col {
+  position: sticky;
+  left: 0;
+  background: var(--bg-card);
+  z-index: 1;
+  text-align: left;
+  padding-right: 0.75rem;
+}
+
+.h2h-table .h2h-self,
+.h2h-table .h2h-none {
+  color: var(--text-muted);
+}
+
+.h2h-table .h2h-self {
+  background: var(--bg-primary);
+}
+
+/* Record book */
+.record-book {
+  margin: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.record {
+  display: grid;
+  gap: 0.15rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.record:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.record dt {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-muted);
+}
+
+.record dd {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.record-value {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-right: 0.5rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Champions and last place */
+.season-results {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.season-result {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.season-result:last-child {
+  border-bottom: none;
+}
+
+.season-year {
+  font-weight: 700;
+  color: var(--text-primary);
+  min-width: 3rem;
+}
+
+.season-champ {
+  font-weight: 600;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.season-last {
+  color: var(--text-secondary);
+}
+
+.season-tbd {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Loading / error */
+.stats-error {
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.stats-retry {
+  padding: 0.5rem 1rem;
+  background: var(--bills-blue);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.stats-retry:hover {
+  background: var(--bills-blue-dark);
+}
+
+@media (max-width: 480px) {
+  .tabs button {
+    padding: 1rem 0.25rem;
+    font-size: 0.85rem;
+  }
+}
