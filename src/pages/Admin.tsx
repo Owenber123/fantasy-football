@@ -5,6 +5,7 @@ import { db } from '../firebase';
 import { useAuth } from '../contexts/AuthContext';
 import { seedDatabase } from '../seedData';
 import type { DraftPick, Punishment, LeagueInfo, Member, Standing } from '../types';
+import { LinkifiedText } from './LinkifiedText';
 import '../styles/Admin.css';
 
 const AVAILABLE_YEARS = ['2025', '2024', '2023', '2022', '2021'];
@@ -590,7 +591,7 @@ export const Admin = () => {
                           <>
                             <div className="punishment-info">
                               <strong>{p.title}</strong>
-                              {p.description && <p>{p.description}</p>}
+                              {p.description && <p className="punishment-desc-text"><LinkifiedText text={p.description} /></p>}
                               {p.assignedToName && <small>Assigned to: {p.assignedToName}</small>}
                             </div>
                             <div className="actions">

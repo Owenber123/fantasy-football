@@ -5,6 +5,9 @@ import { db } from '../firebase';
 import { useAuth } from '../contexts/AuthContext';
 import { seedDatabase } from '../seedData';
 import { Stats } from './Stats';
+import { LiveStandings } from './LiveStandings';
+import { LinkifiedText } from './LinkifiedText';
+import { CURRENT_SEASON } from '../sleeper';
 import type { DraftPick, Punishment, LeagueInfo, Standing } from '../types';
 import '../styles/Home.css';
 
@@ -470,7 +473,7 @@ export const Home = () => {
 
             <div className="card">
               <h3>Leaderboard</h3>
-              {(() => {
+              {selectedYear === CURRENT_SEASON ? <LiveStandings /> : (() => {
                 const yearStandings = allStandings
                   .filter(s => s.year === selectedYear)
                   .sort((a, b) => a.position - b.position);
@@ -599,7 +602,7 @@ export const Home = () => {
                                 )}
                               </div>
                               <div className="punishment-right">
-                                <p className="punishment-desc">{p.description || 'No description'}</p>
+                                <p className="punishment-desc">{p.description ? <LinkifiedText text={p.description} /> : 'No description'}</p>
                               </div>
                             </>
                           )}
@@ -673,7 +676,7 @@ export const Home = () => {
                                 )}
                               </div>
                               <div className="punishment-right">
-                                <p className="punishment-desc">{p.description || 'No description'}</p>
+                                <p className="punishment-desc">{p.description ? <LinkifiedText text={p.description} /> : 'No description'}</p>
                               </div>
                             </>
                           )}

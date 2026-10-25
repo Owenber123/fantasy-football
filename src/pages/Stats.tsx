@@ -10,6 +10,12 @@ const formatPct = (r: Record3) => {
   return total ? ((r.wins + r.ties / 2) / total).toFixed(3).replace(/^0/, '') : '-';
 };
 
+// Seasons played before the league moved to Sleeper
+const PRE_SLEEPER_RESULTS = [
+  { season: '2023', champion: 'Bruno', lastPlace: 'Slye', complete: true },
+  { season: '2022', champion: 'Slye', lastPlace: 'Day', complete: true },
+];
+
 export const Stats = () => {
   const [stats, setStats] = useState<LeagueStats | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -46,49 +52,29 @@ export const Stats = () => {
 
   const name = (id: string | null) => (id ? stats.managerNames[id] ?? 'Unknown' : 'TBD');
   const { records } = stats;
+  const seasonResults = [
+    ...stats.seasonResults.map(r => ({
+      season: r.season,
+      champion: name(r.championId),
+      lastPlace: name(r.lastPlaceId),
+      complete: r.complete,
+    })),
+    ...PRE_SLEEPER_RESULTS.filter(r => !stats.seasonResults.some(s => s.season === r.season)),
+  ].sort((a, b) => Number(b.season) - Number(a.season));
   const sinceLabel = `${stats.firstSeason}–${stats.currentSeason}`;
 
   return (
     <>
       <div className="card">
-        <h3>📈 {stats.currentSeason} Standings</h3>
-        <p className="stats-note">Live from Sleeper, through week {stats.lastScoredWeek}</p>
-        <div className="stats-table-wrap">
-          <table className="stats-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th className="left">Manager</th>
-                <th>W-L-T</th>
-                <th>PF</th>
-                <th>PA</th>
-              </tr>
-            </thead>
-            <tbody>
-              {stats.standings.map((row, i) => (
-                <tr key={row.managerId}>
-                  <td>{i + 1}</td>
-                  <td className="left strong">{name(row.managerId)}</td>
-                  <td>{row.wins}-{row.losses}-{row.ties}</td>
-                  <td>{formatPoints(row.pointsFor)}</td>
-                  <td>{formatPoints(row.pointsAgainst)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div className="card">
         <h3>🏆 Champions &amp; Last Place</h3>
         <ul className="season-results">
-          {stats.seasonResults.map(result => (
+          {seasonResults.map(result => (
             <li key={result.season} className="season-result">
               <span className="season-year">{result.season}</span>
               {result.complete ? (
                 <>
-                  <span className="season-champ">🥇 {name(result.championId)}</span>
-                  <span className="season-last">🚽 {name(result.lastPlaceId)}</span>
+                  <span className="season-champ">🥇 {result.champion}</span>
+                  <span className="season-last">🚽 {result.lastPlace}</span>
                 </>
               ) : (
                 <span className="season-tbd">In progress — TBD</span>
@@ -96,7 +82,7 @@ export const Stats = () => {
             </li>
           ))}
         </ul>
-        <p className="stats-note">Last place is the loser of the toilet bowl final. Sleeper history starts in {stats.firstSeason}.</p>
+        <p className="stats-note">Last place is the loser of the toilet bowl final.</p>
       </div>
 
       <div className="card">

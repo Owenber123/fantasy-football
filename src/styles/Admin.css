@@ -706,3 +706,7 @@
     padding: 2rem;
   }
 }
+
+.punishment-desc-text {
+  overflow-wrap: anywhere;
+}
