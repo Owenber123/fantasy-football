@@ -84,13 +84,31 @@
   font-size: 0.8rem;
 }
 
+/* No padding: the pinned column must sit flush with the scroll edge so cells can't peek out to its left */
+.h2h-wrap {
+  margin: 0;
+  padding: 0;
+}
+
+/* Separate borders so the pinned column's borders move with it */
+.h2h-table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
 .h2h-table .sticky-col {
   position: sticky;
   left: 0;
   background: var(--bg-card);
-  z-index: 1;
+  z-index: 2;
   text-align: left;
+  padding-left: 0;
   padding-right: 0.75rem;
+  box-shadow: inset -1px 0 0 var(--border-color);
+}
+
+.h2h-table thead .sticky-col {
+  z-index: 3;
 }
 
 .h2h-table .h2h-self,

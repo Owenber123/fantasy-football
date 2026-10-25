@@ -202,7 +202,7 @@ export const Stats = () => {
       <div className="card">
         <h3>⚔️ Head-to-Head</h3>
         <p className="stats-note">All-time record of the row manager vs the column manager ({sinceLabel}, playoffs included)</p>
-        <div className="stats-table-wrap">
+        <div className="stats-table-wrap h2h-wrap">
           <table className="stats-table h2h-table">
             <thead>
               <tr>
