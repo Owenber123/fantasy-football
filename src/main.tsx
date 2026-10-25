@@ -5,7 +5,7 @@ import App from './App.tsx'
 import { seedStandings } from './seedData'
 
 // Expose seedStandings to window for console access
-(window as any).seedStandings = seedStandings;
+(window as unknown as { seedStandings: typeof seedStandings }).seedStandings = seedStandings;
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

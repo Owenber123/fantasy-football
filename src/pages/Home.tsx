@@ -4,10 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
 import { useAuth } from '../contexts/AuthContext';
 import { seedDatabase } from '../seedData';
+import { Stats } from './Stats';
 import type { DraftPick, Punishment, LeagueInfo, Standing } from '../types';
 import '../styles/Home.css';
 
-const AVAILABLE_YEARS = ['2025', '2024', '2023', '2022', '2021'];
+const AVAILABLE_YEARS = ['2026', '2025', '2024', '2023', '2022', '2021'];
 
 const getOrdinalSuffix = (n: number) => {
   const s = ['th', 'st', 'nd', 'rd'];
@@ -23,7 +24,7 @@ export const Home = () => {
     return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
   });
   const [selectedYear, setSelectedYear] = useState(AVAILABLE_YEARS[0]);
-  const [activeTab, setActiveTab] = useState<'home' | 'punishments' | 'standings'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'punishments' | 'standings' | 'stats'>('home');
 
   const [leagueInfo, setLeagueInfo] = useState<LeagueInfo | null>(null);
   const [draftOrder, setDraftOrder] = useState<DraftPick[]>([]);
@@ -56,7 +57,7 @@ export const Home = () => {
           if (!leagueSnap.empty) {
             setLeagueInfo(leagueSnap.docs[0].data() as LeagueInfo);
           }
-        } catch (e) {
+        } catch {
           console.log('No league data yet');
         }
 
@@ -65,7 +66,7 @@ export const Home = () => {
           const draftSnap = await getDocs(collection(db, 'draftOrder'));
           const allPicks = draftSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as DraftPick));
           setDraftOrder(allPicks);
-        } catch (e) {
+        } catch {
           console.log('No draft data yet');
         }
 
@@ -73,7 +74,7 @@ export const Home = () => {
         try {
           const punishSnap = await getDocs(collection(db, 'punishments'));
           setAllPunishments(punishSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Punishment)));
-        } catch (e) {
+        } catch {
           console.log('No punishment data yet');
         }
 
@@ -81,7 +82,7 @@ export const Home = () => {
         try {
           const standingsSnap = await getDocs(collection(db, 'standings'));
           setAllStandings(standingsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() } as Standing)));
-        } catch (e) {
+        } catch {
           console.log('No standings data yet');
         }
       } catch (err) {
@@ -216,7 +217,7 @@ export const Home = () => {
       const assignedValue = editPunishmentForm.assignedTo.trim();
 
       // Build the document data for Firestore
-      const firestoreData: Record<string, any> = {
+      const firestoreData: Record<string, unknown> = {
         title: editPunishmentForm.title,
         description: editPunishmentForm.description,
         year: editPunishmentForm.year,
@@ -346,6 +347,12 @@ export const Home = () => {
           onClick={() => setActiveTab('punishments')}
         >
           Punishments
+        </button>
+        <button
+          className={activeTab === 'stats' ? 'active' : ''}
+          onClick={() => setActiveTab('stats')}
+        >
+          Stats
         </button>
       </nav>
 
@@ -679,6 +686,7 @@ export const Home = () => {
             )}
           </>
         )}
+        {activeTab === 'stats' && <Stats />}
       </main>
     </div>
   );

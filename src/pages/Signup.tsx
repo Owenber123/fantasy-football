@@ -19,8 +19,8 @@ export const Signup = () => {
     try {
       await signup(email, password, name);
       navigate('/');
-    } catch (err: any) {
-      setError(err.message || 'Failed to sign up');
+    } catch (err) {
+      setError((err instanceof Error && err.message) || 'Failed to sign up');
     } finally {
       setLoading(false);
     }
