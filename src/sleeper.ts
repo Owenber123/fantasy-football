@@ -134,6 +134,8 @@ export interface LeagueStats {
   firstSeason: string;
   managerNames: Record<string, string>;
   standings: StandingRow[];
+  // Regular-season standings for every Sleeper season, newest first
+  seasonStandings: { season: string; standings: StandingRow[] }[];
   records: {
     highScore: ScoreRecord | null;
     lowScore: ScoreRecord | null;
@@ -387,6 +389,7 @@ const loadLeagueStats = async (): Promise<LeagueStats> => {
     firstSeason: seasons[seasons.length - 1].league.season,
     managerNames,
     standings: computeStandings(current),
+    seasonStandings: seasons.map(s => ({ season: s.league.season, standings: computeStandings(s) })),
     records: {
       highScore: pick(scores, (a, b) => a.points > b.points),
       lowScore: pick(scores, (a, b) => a.points < b.points),

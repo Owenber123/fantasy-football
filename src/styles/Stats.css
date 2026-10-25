@@ -85,18 +85,21 @@
 }
 
 /* No padding: the pinned column must sit flush with the scroll edge so cells can't peek out to its left */
-.h2h-wrap {
+.h2h-wrap,
+.pinned-wrap {
   margin: 0;
   padding: 0;
 }
 
 /* Separate borders so the pinned column's borders move with it */
-.h2h-table {
+.h2h-table,
+.pinned-table {
   border-collapse: separate;
   border-spacing: 0;
 }
 
-.h2h-table .sticky-col {
+.h2h-table .sticky-col,
+.pinned-table .sticky-col {
   position: sticky;
   left: 0;
   background: var(--bg-card);
@@ -107,7 +110,8 @@
   box-shadow: inset -1px 0 0 var(--border-color);
 }
 
-.h2h-table thead .sticky-col {
+.h2h-table thead .sticky-col,
+.pinned-table thead .sticky-col {
   z-index: 3;
 }
 
@@ -118,6 +122,30 @@
 
 .h2h-table .h2h-self {
   background: var(--bg-primary);
+}
+
+/* All-time standings */
+.pinned-table .rank {
+  display: inline-block;
+  min-width: 1.75rem;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.pinned-table .former th,
+.pinned-table .former td {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.former-badge {
+  margin-left: 0.4rem;
+  padding: 0.05rem 0.35rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 /* Record book */
